@@ -1,72 +1,119 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SAPA Balaraja</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAPA BALARAJA</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#172238;font-family:Arial,sans-serif}
-:root{--red:#e51b23;--line:#e4e8ef;--blue:#2563eb;--green:#16a34a;--orange:#f59e0b}
-.side{position:fixed;left:0;top:0;bottom:0;width:235px;background:#fff;border-right:1px solid var(--line)}
-.brand{background:linear-gradient(145deg,#ef252b,#c81016);color:#fff;padding:24px 20px;height:125px;font-size:23px;font-weight:800}.brand small{display:block;font-size:10px;margin-top:8px}
-nav{padding:14px 11px}nav a{display:block;padding:13px 12px;margin:4px 0;border-radius:10px;color:#344054;text-decoration:none;cursor:pointer}nav a.active,nav a:hover{background:var(--red);color:#fff}
-main{margin-left:235px;padding:24px}.head{display:flex;justify-content:space-between;margin-bottom:18px}.head h1{margin:0}.head p{color:#748096;margin:6px 0}.status{background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:9px;font-size:12px}
-.view{display:none}.view.active{display:block}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}.r{border-top:3px solid var(--red)}.b{border-top:3px solid var(--blue)}.g{border-top:3px solid var(--green)}.o{border-top:3px solid var(--orange)}.label{font-size:11px;color:#6f7a8d;font-weight:bold}.num{font-size:28px;font-weight:800;margin:9px 0 3px}.card small{color:#8993a5}
-.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:15px}.panel h2{margin:0 0 5px}.sub{color:#758096;margin:0 0 16px}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{height:41px;border:1px solid #d8dde6;border-radius:9px;padding:0 10px;background:#fff;min-width:135px;flex:1}.btn{height:41px;border:0;border-radius:9px;padding:0 14px;font-weight:bold;cursor:pointer}.primary{background:var(--red);color:#fff}.count{color:#687386;font-size:13px;margin:10px 0}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:9px}table{width:100%;border-collapse:collapse;min-width:850px;font-size:12px}th{background:#fff0f0;color:#8b1519;padding:11px;text-align:left;white-space:nowrap}td{padding:10px;border-top:1px solid #edf0f4;white-space:nowrap}.badge{background:#fff0f0;color:#c51b20;border-radius:99px;padding:4px 7px;font-weight:bold}.empty{text-align:center;padding:30px;color:#8992a2}
-@media(max-width:850px){.side{position:static;width:100%;height:auto}.brand{height:auto}.side nav{display:flex;overflow:auto}.side nav a{white-space:nowrap}main{margin:0;padding:13px}.cards{grid-template-columns:1fr 1fr}.status{display:none}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#17233d}
+header{background:#ed1c24;color:white;padding:28px 24px}header h1{margin:0;font-size:30px}header p{margin:8px 0 0;font-weight:bold}
+nav{display:flex;gap:8px;overflow:auto;padding:14px;background:#fff;position:sticky;top:0;z-index:2}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer}.active{background:#ed1c24;color:#fff}
+main{max-width:1200px;margin:auto;padding:24px}h2{font-size:32px;margin:8px 0}.sub{color:#667085}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.card{background:#fff;border:1px solid #e1e5ec;border-radius:18px;padding:20px;box-shadow:0 3px 12px #0000000b}
+.card b{font-size:38px;display:block;margin-top:12px}.red{border-top:5px solid #ed1c24}.blue{border-top:5px solid #2870e8}.green{border-top:5px solid #18a05b}.orange{border-top:5px solid #f0a000}
+.panel{background:#fff;border:1px solid #e1e5ec;border-radius:18px;padding:18px;margin-top:18px;overflow:auto}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}input,select{padding:12px;border:1px solid #d0d5dd;border-radius:10px;min-width:180px}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:10px;border-bottom:1px solid #e8ebf0;text-align:left;white-space:nowrap}th{background:#f2f4f7}
+.msg{padding:20px;text-align:center;color:#667085}.err{color:#b42318;background:#fef3f2;border-radius:10px;padding:12px}
+@media(max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}main{padding:16px}}
+@media(max-width:500px){.cards{grid-template-columns:1fr 1fr}.card b{font-size:30px}}
 </style>
 </head>
 <body>
-<aside class="side"><div class="brand">📦 SAPA BALARAJA<small>ALFAGIFT • DASHBOARD</small></div>
-<nav><a class="active" data-v="dashboard">🏠 Dashboard</a><a data-v="pending">📦 Pendingan</a><a data-v="absensi">🕘 Absensi SAPA</a><a data-v="serah">📋 Rekap Serah Terima</a></nav></aside>
+<header><h1>📦 SAPA BALARAJA</h1><p>ALFAGIFT • DASHBOARD</p></header>
+<nav>
+<button id="n0" class="active" onclick="show('dash')">🏠 Dashboard</button>
+<button id="n1" onclick="show('pending')">📦 Pendingan</button>
+<button id="n2" onclick="show('absensi')">🕘 Absensi SAPA</button>
+<button id="n3" onclick="show('serah')">📋 Rekap Serah Terima</button>
+</nav>
+<main>
+<section id="dash">
+<h2>SAPA BALARAJA</h2><div class="sub">Pendingan • Absensi • Serah Terima</div>
+<div class="cards">
+<div class="card red">📦 PENDINGAN<b id="cp">—</b><span>Total pending</span></div>
+<div class="card blue">👥 KARYAWAN<b id="ca">—</b><span>Master absensi</span></div>
+<div class="card green">📋 SERAH TERIMA<b id="cs">—</b><span>Total order</span></div>
+<div class="card orange">🏪 TOKO<b id="ct">—</b><span>Toko pending</span></div>
+</div>
+<div class="panel"><h3>Menu SAPA</h3><p class="sub">Pilih menu yang ingin dibuka.</p>
+<button class="active" onclick="show('pending')">📦 Pendingan</button>
+<button onclick="show('absensi')">🕘 Absensi</button>
+<button onclick="show('serah')">📋 Serah Terima</button>
+<button onclick="loadAll()">↻ Refresh Data</button></div>
+</section>
 
-<main><div class="head"><div><h1>SAPA BALARAJA</h1><p>Pendingan • Absensi • Serah Terima</p></div><div class="status">● Live Dashboard<br><span id="last">Memuat...</span></div></div>
+<section id="pending" hidden><h2>📦 Pendingan SAPA</h2><div class="sub">Data langsung dari Google Sheet</div>
+<div class="controls"><input id="pq" placeholder="Cari toko, order, PLU, customer..." oninput="renderP()"><button onclick="loadAll()">↻ Refresh</button></div>
+<div class="panel"><div id="pmsg" class="msg">Memuat...</div><table id="pt"></table></div></section>
 
-<section id="dashboard" class="view active"><div class="cards">
-<div class="card r"><div class="label">📦 PENDINGAN</div><div class="num" id="dP">0</div><small>Total pending</small></div>
-<div class="card b"><div class="label">👥 KARYAWAN</div><div class="num" id="dA">0</div><small>Master absensi</small></div>
-<div class="card g"><div class="label">📋 SERAH TERIMA</div><div class="num" id="dS">0</div><small>Total order</small></div>
-<div class="card o"><div class="label">🏪 TOKO</div><div class="num" id="dT">0</div><small>Toko pending</small></div></div>
-<div class="panel"><h2>Menu SAPA</h2><p class="sub">Pilih menu yang ingin dibuka.</p><button class="btn primary" onclick="show('pending')">📦 Pendingan</button> <button class="btn" onclick="show('absensi')">🕘 Absensi</button> <button class="btn" onclick="show('serah')">📋 Serah Terima</button></div></section>
+<section id="absensi" hidden><h2>🕘 Absensi SAPA</h2><div class="sub">Master karyawan SAPA</div>
+<div class="controls"><input id="aq" placeholder="Cari NIK atau nama..." oninput="renderA"><button onclick="loadAll()">↻ Refresh</button></div>
+<div class="panel"><div id="amsg" class="msg">Memuat...</div><table id="at"></table></div></section>
 
-<section id="pending" class="view"><div class="panel"><h2>📦 Pendingan SAPA</h2><p class="sub">Data dari Google Sheet Pendingan.</p>
-<div class="filters"><input id="ps" placeholder="🔎 Cari toko, order, PLU, customer..."><label>Dari <input id="pf" type="date"></label><label>Sampai <input id="pt" type="date"></label><select id="ph"><option value="">Semua Penanganan</option></select><select id="pp"><option value="">Semua PIC</option></select><button class="btn primary" onclick="exportP()">⬇ Export</button><button class="btn" onclick="resetP()">Reset</button></div>
-<div class="count" id="pc">Menampilkan 0 data</div><div class="tablewrap"><table><thead><tr><th>TGL ORDER</th><th>KODE TOKO</th><th>NAMA TOKO</th><th>NAMA AC</th><th>NAMA AM</th><th>DC</th><th>NO ORDE</th><th>PLU</th><th>KODE PLU</th><th>DESKRIPSI</th><th>QTY</th><th>OH</th><th>CUSTOMER</th><th>PENANGANAN</th><th>KETERANGAN</th><th>PIC</th><th>UPDATE</th></tr></thead><tbody id="pb"></tbody></table></div></div></section>
-
-<section id="absensi" class="view"><div class="cards"><div class="card b"><div class="label">👥 KARYAWAN</div><div class="num" id="at">0</div></div><div class="card g"><div class="label">🏷️ ZONA</div><div class="num" id="az">0</div></div><div class="card o"><div class="label">👥 GRUP</div><div class="num" id="ag">0</div></div><div class="card r"><div class="label">📌 SUMBER</div><div class="num">SHEET</div></div></div>
-<div class="panel"><h2>🕘 Absensi SAPA</h2><p class="sub">Master karyawan dari Google Sheet ABSENSI.</p><div class="filters"><input id="as" placeholder="🔎 Cari NIK atau nama..."><select id="azf"><option value="">Semua Zona</option></select><select id="agf"><option value="">Semua Grup</option></select><button class="btn" onclick="resetA()">Reset</button></div><div class="count" id="ac">Menampilkan 0 karyawan</div><div class="tablewrap"><table><thead><tr><th>NO</th><th>NIK</th><th>NAMA</th><th>ZONA</th><th>GRUP</th></tr></thead><tbody id="ab"></tbody></table></div></div></section>
-
-<section id="serah" class="view"><div class="cards"><div class="card r"><div class="label">📋 TOTAL ORDER</div><div class="num" id="st">0</div></div><div class="card b"><div class="label">📦 TOTAL PCS</div><div class="num" id="sp">0</div></div><div class="card g"><div class="label">📦 TOTAL DOS</div><div class="num" id="sd">0</div></div><div class="card o"><div class="label">⚠️ PENDING</div><div class="num" id="spp">0</div></div></div>
-<div class="panel"><h2>📋 Rekap Serah Terima SAPA</h2><p class="sub">Shift 1, Shift 2 dan Gabungan.</p><div class="filters"><input id="ss" placeholder="🔎 Cari kode toko, inisial, picker..."><label>Dari <input id="sf" type="date"></label><label>Sampai <input id="stt" type="date"></label><select id="ssh"><option value="">Semua Shift</option><option>SHIFT 1</option><option>SHIFT 2</option><option>GABUNGAN</option></select><button class="btn primary" onclick="exportS()">⬇ Export</button><button class="btn" onclick="resetS()">Reset</button></div><div class="count" id="sc">Menampilkan 0 data</div>
-<div class="tablewrap"><table><thead><tr><th>TANGGAL</th><th>SHIFT</th><th>KODE</th><th>INISIAL</th><th>GATE</th><th>ORDER</th><th>PCS</th><th>CONT</th><th>DOS</th><th>PICKER</th><th>NO ORDER PENDING</th></tr></thead><tbody id="sb"></tbody></table></div></div></section>
+<section id="serah" hidden><h2>📋 Rekap Serah Terima SAPA</h2><div class="sub">Data langsung dari Google Sheet</div>
+<div class="controls"><input id="sq" placeholder="Cari toko / kode / picker..." oninput="renderS()"><input id="sd" type="date"><input id="ed" type="date"><button onclick="renderS()">Filter</button><button onclick="loadAll()">↻ Refresh</button></div>
+<div class="panel"><div id="smsg" class="msg">Memuat...</div><table id="st"></table></div></section>
 </main>
 <script>
-const PCSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vS169Srv3rdFs6JAfzotcL9qklXPh0AKi6jt-2ROYDlYSKtdDJy2KQ0znqTfHF_IVCtLJjyXXdbnLbm/pub?gid=463015523&single=true&output=csv";
-const ACSV="https://docs.google.com/spreadsheets/d/14V-_mluDi0m3MzCuODu1qWuAiMVdBj33RmOLNtd8xd4/gviz/tq?tqx=out:csv&sheet=Sheet1";
-const SCsv="https://docs.google.com/spreadsheets/d/e/2PACX-1vR3ernNEwvWFbHmFCxYTe-1PIU2zrmiSXpUfKygTyTifU0utlr78ynlXjFWP7xcVuxSWMpgUlWMg_ey/pub?gid=277045831&single=true&output=csv";
-let P=[],A=[],S=[],PF=[],SF=[];
-function csv(t){let o=[],r=[],c="",q=0;for(let i=0;i<t.length;i++){let x=t[i],n=t[i+1];if(x=='"'&&q&&n=='"'){c+='"';i++;continue}if(x=='"'){q=!q;continue}if(x==','&&!q){r.push(c.trim());c="";continue}if((x=='
-'||x=='
-')&&!q){if(x=='
-'&&n=='
-')i++;r.push(c.trim());if(r.some(Boolean))o.push(r);r=[];c="";continue}c+=x}if(c||r.length){r.push(c.trim());if(r.some(Boolean))o.push(r)}return o}
-function e(x){return String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function date(v){let m=String(v||"").trim().match(/^(\d{1,2})[-\/](\w+|\d{1,2})[-\/](\d{2,4})$/);if(!m)return"";let mo={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12},n=isNaN(+m[2])?(mo[m[2].toLowerCase()]||0):+m[2],y=+m[3];if(y<100)y+=2000;return y+"-"+String(n).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0")}
-async function get(u){return csv(await(await fetch(u,{cache:"no-store"})).text())}
-async function load(){
-try{P=(await get(PCSV)).slice(1);let h=[...new Set(P.map(r=>r[13]).filter(Boolean))],p=[...new Set(P.map(r=>r[15]).filter(Boolean))];ph.innerHTML='<option value="">Semua Penanganan</option>'+h.map(x=>`<option>${e(x)}</option>`).join("");pp.innerHTML='<option value="">Semua PIC</option>'+p.map(x=>`<option>${e(x)}</option>`).join("");renderP()}catch(x){pb.innerHTML='<tr><td colspan="17" class="empty">Pendingan gagal dimuat.</td></tr>'}
-try{A=(await get(ACSV)).slice(1).filter(r=>r.some(Boolean));let z=[...new Set(A.map(r=>r[3]).filter(Boolean))],g=[...new Set(A.map(r=>r[4]).filter(Boolean))];azf.innerHTML='<option value="">Semua Zona</option>'+z.map(x=>`<option>${e(x)}</option>`).join("");agf.innerHTML='<option value="">Semua Grup</option>'+g.map(x=>`<option>${e(x)}</option>`).join("");renderA()}catch(x){ab.innerHTML='<tr><td colspan="5" class="empty">Absensi gagal dimuat.</td></tr>'}
-try{S=(await get(SCsv)).slice(1).filter(r=>r.some(Boolean));renderS()}catch(x){console.error("Rekap:",x);sb.innerHTML='<tr><td colspan="11" class="empty">❌ Rekap gagal dimuat. Pastikan link Google Sheet sudah Publish to web.</td></tr>';document.getElementById("dS").textContent="—"}
-last.textContent="Update "+new Date().toLocaleTimeString("id-ID")}
-function renderP(){let s=ps.value.toLowerCase(),h=ph.value,p=pp.value,f=pf.value,t=pt.value;PF=P.filter(r=>(!s||r.join(" ").toLowerCase().includes(s))&&(!h||r[13]==h)&&(!p||r[15]==p)&&(!f||date(r[0])>=f)&&(!t||date(r[0])<=t));pc.textContent="Menampilkan "+PF.length+" data";pb.innerHTML=PF.length?PF.map(r=>"<tr>"+r.slice(0,17).map((x,i)=>`<td>${i==13?'<span class=badge>'+e(x)+'</span>':e(x)}</td>`).join("")+"</tr>").join(""):'<tr><td colspan="17" class="empty">Data tidak ditemukan</td></tr>';dP.textContent=PF.length;dT.textContent=new Set(PF.map(r=>r[1]).filter(Boolean)).size}
-function renderA(){let s=as.value.toLowerCase(),z=azf.value,g=agf.value,r=A.filter(x=>(!s||((x[1]||"")+" "+(x[2]||"")).toLowerCase().includes(s))&&(!z||x[3]==z)&&(!g||x[4]==g));at.textContent=A.length;az.textContent=new Set(A.map(x=>x[3]).filter(Boolean)).size;ag.textContent=new Set(A.map(x=>x[4]).filter(Boolean)).size;dA.textContent=A.length;ac.textContent="Menampilkan "+r.length+" karyawan";ab.innerHTML=r.length?r.map(x=>`<tr><td>${e(x[0])}</td><td>${e(x[1])}</td><td><b>${e(x[2])}</b></td><td>${e(x[3])}</td><td>${e(x[4])}</td></tr>`).join(""):'<tr><td colspan="5" class="empty">Data tidak ditemukan</td></tr>'}
-function renderS(){let s=ss.value.toLowerCase(),sh=ssh.value,f=sf.value,t=stt.value;SF=S.filter(x=>(!s||x.join(" ").toLowerCase().includes(s))&&(!sh||String(x[1]).toUpperCase().includes(sh))&&(!f||date(x[0])>=f)&&(!t||date(x[0])<=t));sc.textContent="Menampilkan "+SF.length+" data";sb.innerHTML=SF.length?SF.map(x=>`<tr>${x.slice(0,11).map(y=>`<td>${e(y)}</td>`).join("")}</tr>`).join(""):'<tr><td colspan="11" class="empty">Data tidak ditemukan</td></tr>';let n=i=>SF.reduce((a,x)=>a+(parseFloat(x[i])||0),0);st.textContent=n(5);sp.textContent=n(6);sd.textContent=n(8);spp.textContent=n(10);dS.textContent=n(5)}
-function show(id){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav a[data-v]").forEach(x=>x.classList.toggle("active",x.dataset.v==id))}
-document.querySelectorAll("nav a[data-v]").forEach(x=>x.onclick=()=>show(x.dataset.v));
-[ps,pf,pt,ph,pp].forEach(x=>x.onchange=x.oninput=renderP);[as,azf,agf].forEach(x=>x.onchange=x.oninput=renderA);[ss,sf,stt,ssh].forEach(x=>x.onchange=x.oninput=renderS);
-function resetP(){ps.value=pf.value=pt.value=ph.value=pp.value="";renderP()}function resetA(){as.value=azf.value=agf.value="";renderA()}function resetS(){ss.value=sf.value=stt.value=ssh.value="";renderS()}
-function download(rows,name){let t=rows.map(r=>r.map(x=>`"${String(x??"").replaceAll('"','""')}"`).join(",")).join("
-"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+t],{type:"text/csv"}));a.download=name;a.click()}
-function exportP(){download(PF,"pendingan-sapa.csv")}function exportS(){download(SF,"rekap-serah-terima-sapa.csv")}
-load();
-</script></body></html>
+const URLS={p:'https://docs.google.com/spreadsheets/d/e/2PACX-1vS169Srv3rdFs6JAfzotcL9qklXPh0AKi6jt-2ROYDlYSKtdDJy2KQ0znqTfHF_IVCtLJjyXXdbnLbm/pub?gid=463015523&single=true&output=csv',a:'https://docs.google.com/spreadsheets/d/14V-_mluDi0m3MzCuODu1qWuAiMVdBj33RmOLNtd8xd4/gviz/tq?tqx=out:csv&gid=0',s:'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3ernNEwvWFbHmFCxYTe-1PIU2zrmiSXpUfKygTyTifU0utlr78ynlXjFWP7xcVuxSWMpgUlWMg_ey/pub?gid=277045831&single=true&output=csv'};
+let P=[],A=[],S=[];
+
+function csv(text){
+ let rows=[],row=[],cell='',q=false;
+ for(let i=0;i<text.length;i++){
+  let c=text[i],n=text[i+1];
+  if(c=='"'&&q&&n=='"'){cell+='"';i++;continue}
+  if(c=='"'){q=!q;continue}
+  if(c==','&&!q){row.push(cell.trim());cell='';continue}
+  if((c=='\n'||c=='\r')&&!q){if(c=='\r'&&n=='\n')i++;row.push(cell.trim());cell='';if(row.some(x=>x!==''))rows.push(row);row=[];continue}
+  cell+=c;
+ }
+ if(cell||row.length){row.push(cell.trim());if(row.some(x=>x!==''))rows.push(row)}
+ return rows;
+}
+async function get(url){
+ const u=url+(url.includes('?')?'&':'?')+'_='+Date.now();
+ const r=await fetch(u,{cache:'no-store'});
+ if(!r.ok)throw Error('HTTP '+r.status);
+ const t=await r.text();
+ if(t.trim().startsWith('<!DOCTYPE')||t.trim().startsWith('<html'))throw Error('Google Sheet belum dapat dibaca publik');
+ return csv(t);
+}
+function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function table(el,data,max=18){
+ if(!data.length){el.innerHTML='';return}
+ el.innerHTML='<thead><tr>'+data[0].slice(0,max).map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+
+ data.slice(1).map(r=>'<tr>'+r.slice(0,max).map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody>';
+}
+function renderP(){
+ let q=(document.getElementById('pq').value||'').toLowerCase();
+ let d=P.filter(r=>r.join(' ').toLowerCase().includes(q));
+ table(document.getElementById('pt'),d);document.getElementById('pmsg').textContent=d.length?'Menampilkan '+Math.max(0,d.length-1)+' data':'Tidak ada data';
+}
+function renderA(){
+ let q=(document.getElementById('aq').value||'').toLowerCase();
+ let d=A.filter(r=>r.join(' ').toLowerCase().includes(q));
+ table(document.getElementById('at'),d);document.getElementById('amsg').textContent=d.length?'Menampilkan '+Math.max(0,d.length-1)+' data':'Tidak ada data';
+}
+function renderS(){
+ let q=(document.getElementById('sq').value||'').toLowerCase();
+ let d=S.filter(r=>r.join(' ').toLowerCase().includes(q));
+ table(document.getElementById('st'),d);document.getElementById('smsg').textContent=d.length?'Menampilkan '+Math.max(0,d.length-1)+' data':'Tidak ada data';
+}
+function show(x){
+ ['dash','pending','absensi','serah'].forEach((id,i)=>{document.getElementById(id).hidden=id!==x;document.getElementById('n'+i).classList.toggle('active',id===x)})
+}
+async function loadAll(){
+ ['pmsg','amsg','smsg'].forEach(id=>document.getElementById(id).innerHTML='⏳ Mengambil data...');
+ try{P=await get(URLS.p);document.getElementById('cp').textContent=Math.max(0,P.length-1);renderP()}
+ catch(e){document.getElementById('pmsg').innerHTML='<div class="err">❌ Pendingan gagal: '+esc(e.message)+'</div>';document.getElementById('cp').textContent='—'}
+ try{A=await get(URLS.a);document.getElementById('ca').textContent=Math.max(0,A.length-1);renderA()}
+ catch(e){document.getElementById('amsg').innerHTML='<div class="err">❌ Absensi gagal: '+esc(e.message)+'</div>';document.getElementById('ca').textContent='—'}
+ try{S=await get(URLS.s);document.getElementById('cs').textContent=Math.max(0,S.length-1);renderS()}
+ catch(e){document.getElementById('smsg').innerHTML='<div class="err">❌ Serah Terima gagal: '+esc(e.message)+'</div>';document.getElementById('cs').textContent='—'}
+}
+loadAll();
+</script>
+</body></html>
