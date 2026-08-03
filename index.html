@@ -45,7 +45,16 @@ table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:10px;bord
 </section>
 
 <section id="pending" hidden><h2>📦 Pendingan SAPA</h2><div class="sub">Data langsung dari Google Sheet</div>
-<div class="controls"><input id="pq" placeholder="Cari toko, order, PLU, customer..." oninput="renderP()"><button onclick="loadAll()">↻ Refresh</button></div>
+<div class="controls">
+<input id="pq" placeholder="🔎 Cari toko, order, PLU, customer..." oninput="renderP()">
+<input id="pd1" type="date" onchange="renderP()">
+<input id="pd2" type="date" onchange="renderP()">
+<select id="ph" onchange="renderP()"><option value="">Semua Penanganan</option></select>
+<select id="pp" onchange="renderP()"><option value="">Semua PIC</option></select>
+<button onclick="clearPendingFilters()">✕ Reset</button>
+<button onclick="loadAll()">↻ Refresh</button>
+<button onclick="exportPending()">↓ Export</button>
+</div>
 <div class="panel"><div id="pmsg" class="msg">Memuat...</div><table id="pt"></table></div></section>
 
 <section id="absensi" hidden><h2>🕘 Absensi SAPA</h2><div class="sub">Master karyawan SAPA</div>
@@ -87,10 +96,72 @@ function table(el,data,max=18){
  el.innerHTML='<thead><tr>'+data[0].slice(0,max).map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+
  data.slice(1).map(r=>'<tr>'+r.slice(0,max).map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody>';
 }
+function normDate(v){
+  v=String(v||'').trim();
+  if(!v)return '';
+  let m=v.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  if(m)return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');
+  let d=new Date(v); return isNaN(d)?'':d.toISOString().slice(0,10);
+}
+function pendingHeader(){
+  const h=(P[0]||[]).map(x=>String(x).trim().toUpperCase());
+  const find=(...names)=>{for(const n of names){const i=h.findIndex(x=>x.includes(n));if(i>=0)return i}return -1};
+  return {
+    date:find('TGL ORDER','TANGGAL'),
+    handling:find('PENANGANAN'),
+    pic:find('PIC'),
+    qty:find('QTY')
+  };
+}
+function fillPendingSelects(){
+  const ph=document.getElementById('ph'), pp=document.getElementById('pp');
+  const H=pendingHeader(), hs=new Set(), ps=new Set();
+  P.slice(1).forEach(r=>{if(H.handling>=0&&r[H.handling])hs.add(r[H.handling]);if(H.pic>=0&&r[H.pic])ps.add(r[H.pic])});
+  ph.innerHTML='<option value="">Semua Penanganan</option>'+[...hs].sort().map(x=>'<option>'+esc(x)+'</option>').join('');
+  pp.innerHTML='<option value="">Semua PIC</option>'+[...ps].sort().map(x=>'<option>'+esc(x)+'</option>').join('');
+}
 function renderP(){
- let q=(document.getElementById('pq').value||'').toLowerCase();
- let d=P.filter(r=>r.join(' ').toLowerCase().includes(q));
- table(document.getElementById('pt'),d);document.getElementById('pmsg').textContent=d.length?'Menampilkan '+Math.max(0,d.length-1)+' data':'Tidak ada data';
+  const q=(document.getElementById('pq').value||'').toLowerCase();
+  const d1=document.getElementById('pd1').value, d2=document.getElementById('pd2').value;
+  const handling=document.getElementById('ph').value, pic=document.getElementById('pp').value;
+  const H=pendingHeader();
+  let d=P.slice(1).filter(r=>{
+    if(q&&!r.join(' ').toLowerCase().includes(q))return false;
+    if(handling&&String(r[H.handling]||'')!==handling)return false;
+    if(pic&&String(r[H.pic]||'')!==pic)return false;
+    if(d1||d2){
+      const dt=normDate(r[H.date]);
+      if(!dt)return false;
+      if(d1&&dt<d1)return false;
+      if(d2&&dt>d2)return false;
+    }
+    return true;
+  });
+  const data=[P[0]||[]].concat(d);
+  table(document.getElementById('pt'),data);
+  document.getElementById('pmsg').textContent='Menampilkan '+d.length+' data';
+}
+function clearPendingFilters(){
+  ['pq','pd1','pd2'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ph').value='';
+  document.getElementById('pp').value='';
+  renderP();
+}
+function exportPending(){
+  const rows=[P[0]||[]];
+  const q=(document.getElementById('pq').value||'').toLowerCase();
+  const d1=document.getElementById('pd1').value,d2=document.getElementById('pd2').value;
+  const handling=document.getElementById('ph').value,pic=document.getElementById('pp').value,H=pendingHeader();
+  P.slice(1).forEach(r=>{
+    if(q&&!r.join(' ').toLowerCase().includes(q))return;
+    if(handling&&String(r[H.handling]||'')!==handling)return;
+    if(pic&&String(r[H.pic]||'')!==pic)return;
+    const dt=normDate(r[H.date]);
+    if((d1||d2)&&(!dt||(d1&&dt<d1)||(d2&&dt>d2)))return;
+    rows.push(r);
+  });
+  const csv=rows.map(r=>r.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='pendingan_sapa.csv';a.click();
 }
 function renderA(){
  let q=(document.getElementById('aq').value||'').toLowerCase();
@@ -107,7 +178,7 @@ function show(x){
 }
 async function loadAll(){
  ['pmsg','amsg','smsg'].forEach(id=>document.getElementById(id).innerHTML='⏳ Mengambil data...');
- try{P=await get(URLS.p);document.getElementById('cp').textContent=Math.max(0,P.length-1);renderP()}
+ try{P=await get(URLS.p);document.getElementById('cp').textContent=Math.max(0,P.length-1);fillPendingSelects();renderP()}
  catch(e){document.getElementById('pmsg').innerHTML='<div class="err">❌ Pendingan gagal: '+esc(e.message)+'</div>';document.getElementById('cp').textContent='—'}
  try{A=await get(URLS.a);document.getElementById('ca').textContent=Math.max(0,A.length-1);renderA()}
  catch(e){document.getElementById('amsg').innerHTML='<div class="err">❌ Absensi gagal: '+esc(e.message)+'</div>';document.getElementById('ca').textContent='—'}
