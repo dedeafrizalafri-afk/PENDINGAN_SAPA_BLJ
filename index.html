@@ -20,7 +20,7 @@ main{margin-left:235px;padding:24px}.head{display:flex;justify-content:space-bet
 <aside class="side"><div class="brand">📦 SAPA BALARAJA<small>ALFAGIFT • DASHBOARD</small></div>
 <nav><a class="active" data-v="dashboard">🏠 Dashboard</a><a data-v="pending">📦 Pendingan</a><a data-v="absensi">🕘 Absensi SAPA</a><a data-v="serah">📋 Rekap Serah Terima</a></nav></aside>
 
-<main><div class="head"><div><h1>SAPA BALARAJA</h1><p>Pendingan • Absensi • Serah Terima</p></div><div class="status">● Live Dashboard<br><span id="last">Memuat...</span><br><button class="btn primary" style="margin-top:7px;height:30px;padding:0 10px" onclick="load()">↻ Refresh Data</button></div></div>
+<main><div class="head"><div><h1>SAPA BALARAJA</h1><p>Pendingan • Absensi • Serah Terima</p></div><div class="status">● Live Dashboard<br><span id="last">Memuat...</span></div></div>
 
 <section id="dashboard" class="view active"><div class="cards">
 <div class="card r"><div class="label">📦 PENDINGAN</div><div class="num" id="dP">0</div><small>Total pending</small></div>
@@ -43,8 +43,7 @@ main{margin-left:235px;padding:24px}.head{display:flex;justify-content:space-bet
 <script>
 const PCSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vS169Srv3rdFs6JAfzotcL9qklXPh0AKi6jt-2ROYDlYSKtdDJy2KQ0znqTfHF_IVCtLJjyXXdbnLbm/pub?gid=463015523&single=true&output=csv";
 const ACSV="https://docs.google.com/spreadsheets/d/14V-_mluDi0m3MzCuODu1qWuAiMVdBj33RmOLNtd8xd4/gviz/tq?tqx=out:csv&sheet=Sheet1";
-const SCID="1-UH5YVCfCAQ_Ek-2dXzedysECi9mrvPyP_jrl0NAB3Q",SGID="277045831";
-const SCsv=`https://docs.google.com/spreadsheets/d/${SCID}/gviz/tq?tqx=out:csv&gid=${SGID}`;
+const SCsv="https://docs.google.com/spreadsheets/d/e/2PACX-1vR3ernNEwvWFbHmFCxYTe-1PIU2zrmiSXpUfKygTyTifU0utlr78ynlXjFWP7xcVuxSWMpgUlWMg_ey/pub?gid=277045831&single=true&output=csv";
 let P=[],A=[],S=[],PF=[],SF=[];
 function csv(t){let o=[],r=[],c="",q=0;for(let i=0;i<t.length;i++){let x=t[i],n=t[i+1];if(x=='"'&&q&&n=='"'){c+='"';i++;continue}if(x=='"'){q=!q;continue}if(x==','&&!q){r.push(c.trim());c="";continue}if((x=='
 '||x=='
@@ -53,18 +52,11 @@ function csv(t){let o=[],r=[],c="",q=0;for(let i=0;i<t.length;i++){let x=t[i],n=
 ')i++;r.push(c.trim());if(r.some(Boolean))o.push(r);r=[];c="";continue}c+=x}if(c||r.length){r.push(c.trim());if(r.some(Boolean))o.push(r)}return o}
 function e(x){return String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function date(v){let m=String(v||"").trim().match(/^(\d{1,2})[-\/](\w+|\d{1,2})[-\/](\d{2,4})$/);if(!m)return"";let mo={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12},n=isNaN(+m[2])?(mo[m[2].toLowerCase()]||0):+m[2],y=+m[3];if(y<100)y+=2000;return y+"-"+String(n).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0")}
-async function get(u){
-  const url=u+(u.includes("?")?"&":"?")+"_="+Date.now();
-  const res=await fetch(url,{cache:"no-store"});
-  if(!res.ok) throw new Error("HTTP "+res.status);
-  const text=await res.text();
-  if(!text.trim() || text.trim().startsWith("<!DOCTYPE")) throw new Error("Sumber tidak mengembalikan CSV");
-  return csv(text);
-}
+async function get(u){return csv(await(await fetch(u,{cache:"no-store"})).text())}
 async function load(){
-try{P=(await get(PCSV)).slice(1);let h=[...new Set(P.map(r=>r[13]).filter(Boolean))],p=[...new Set(P.map(r=>r[15]).filter(Boolean))];ph.innerHTML='<option value="">Semua Penanganan</option>'+h.map(x=>`<option>${e(x)}</option>`).join("");pp.innerHTML='<option value="">Semua PIC</option>'+p.map(x=>`<option>${e(x)}</option>`).join("");renderP()}catch(x){console.error(x);pb.innerHTML='<tr><td colspan="17" class="empty">❌ Pendingan gagal dimuat. Pastikan Google Sheet dipublish dan bisa diakses publik.</td></tr>';dP.textContent="—";dT.textContent="—"}
-try{A=(await get(ACSV)).slice(1).filter(r=>r.some(Boolean));let z=[...new Set(A.map(r=>r[3]).filter(Boolean))],g=[...new Set(A.map(r=>r[4]).filter(Boolean))];azf.innerHTML='<option value="">Semua Zona</option>'+z.map(x=>`<option>${e(x)}</option>`).join("");agf.innerHTML='<option value="">Semua Grup</option>'+g.map(x=>`<option>${e(x)}</option>`).join("");renderA()}catch(x){console.error(x);ab.innerHTML='<tr><td colspan="5" class="empty">❌ Absensi gagal dimuat. Pastikan Google Sheet bisa diakses publik.</td></tr>';dA.textContent="—"}
-try{S=(await get(SCsv)).slice(1).filter(r=>r.some(Boolean));renderS()}catch(x){console.error(x);sb.innerHTML='<tr><td colspan="11" class="empty">❌ Rekap gagal dimuat. Pastikan spreadsheet/tab dipublish ke web.</td></tr>';dS.textContent="—"}
+try{P=(await get(PCSV)).slice(1);let h=[...new Set(P.map(r=>r[13]).filter(Boolean))],p=[...new Set(P.map(r=>r[15]).filter(Boolean))];ph.innerHTML='<option value="">Semua Penanganan</option>'+h.map(x=>`<option>${e(x)}</option>`).join("");pp.innerHTML='<option value="">Semua PIC</option>'+p.map(x=>`<option>${e(x)}</option>`).join("");renderP()}catch(x){pb.innerHTML='<tr><td colspan="17" class="empty">Pendingan gagal dimuat.</td></tr>'}
+try{A=(await get(ACSV)).slice(1).filter(r=>r.some(Boolean));let z=[...new Set(A.map(r=>r[3]).filter(Boolean))],g=[...new Set(A.map(r=>r[4]).filter(Boolean))];azf.innerHTML='<option value="">Semua Zona</option>'+z.map(x=>`<option>${e(x)}</option>`).join("");agf.innerHTML='<option value="">Semua Grup</option>'+g.map(x=>`<option>${e(x)}</option>`).join("");renderA()}catch(x){ab.innerHTML='<tr><td colspan="5" class="empty">Absensi gagal dimuat.</td></tr>'}
+try{S=(await get(SCsv)).slice(1).filter(r=>r.some(Boolean));renderS()}catch(x){console.error("Rekap:",x);sb.innerHTML='<tr><td colspan="11" class="empty">❌ Rekap gagal dimuat. Pastikan link Google Sheet sudah Publish to web.</td></tr>';document.getElementById("dS").textContent="—"}
 last.textContent="Update "+new Date().toLocaleTimeString("id-ID")}
 function renderP(){let s=ps.value.toLowerCase(),h=ph.value,p=pp.value,f=pf.value,t=pt.value;PF=P.filter(r=>(!s||r.join(" ").toLowerCase().includes(s))&&(!h||r[13]==h)&&(!p||r[15]==p)&&(!f||date(r[0])>=f)&&(!t||date(r[0])<=t));pc.textContent="Menampilkan "+PF.length+" data";pb.innerHTML=PF.length?PF.map(r=>"<tr>"+r.slice(0,17).map((x,i)=>`<td>${i==13?'<span class=badge>'+e(x)+'</span>':e(x)}</td>`).join("")+"</tr>").join(""):'<tr><td colspan="17" class="empty">Data tidak ditemukan</td></tr>';dP.textContent=PF.length;dT.textContent=new Set(PF.map(r=>r[1]).filter(Boolean)).size}
 function renderA(){let s=as.value.toLowerCase(),z=azf.value,g=agf.value,r=A.filter(x=>(!s||((x[1]||"")+" "+(x[2]||"")).toLowerCase().includes(s))&&(!z||x[3]==z)&&(!g||x[4]==g));at.textContent=A.length;az.textContent=new Set(A.map(x=>x[3]).filter(Boolean)).size;ag.textContent=new Set(A.map(x=>x[4]).filter(Boolean)).size;dA.textContent=A.length;ac.textContent="Menampilkan "+r.length+" karyawan";ab.innerHTML=r.length?r.map(x=>`<tr><td>${e(x[0])}</td><td>${e(x[1])}</td><td><b>${e(x[2])}</b></td><td>${e(x[3])}</td><td>${e(x[4])}</td></tr>`).join(""):'<tr><td colspan="5" class="empty">Data tidak ditemukan</td></tr>'}
